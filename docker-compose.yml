@@ -1,0 +1,41 @@
+services:
+  mcp-vuln-data:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mcp-vuln-data-server
+    ports:
+      - "3050:3050"  # 1MCP agent
+      - "8000:8000"  # Python server
+    volumes:
+      # Mount cache directories for persistent data
+      - mcp_cache:/tmp/mcp_cache
+      - vuln_data:/tmp/vuln_data
+      # Mount configuration files
+      - ./.1mcprc.docker:/app/.1mcprc.docker:ro
+      # Mount source code for development (optional)
+      - ./agent:/app/agent:ro
+      - ./fetch-mcp:/app/fetch-mcp:ro
+      - ./gitingest-mcp:/app/gitingest-mcp:ro
+      - ./mcp-pandoc:/app/mcp-pandoc:ro
+      - ./mcp-filesystem-server:/app/mcp-filesystem-server:ro
+      - ./mcp-interpreter-server:/app/mcp-interpreter-server:ro
+      - ./parse-pdf:/app/parse-pdf:ro
+    environment:
+      - PYTHONPATH=/app
+      - NODE_ENV=production
+      - MCP_CACHE_DIR=/tmp/mcp_cache
+      - VULN_DATA_DIR=/tmp/vuln_data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3050/health", "||", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  mcp_cache:
+    driver: local
+  vuln_data:
+    driver: local

@@ -11,8 +11,8 @@ mcp = FastMCP("Vulnerabilities reader")
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-project_manager = get_project_manager()
 
 
 if __name__ == "__main__":
+    mcp.settings.host = "0.0.0.0"
     mcp.run(transport="streamable-http")  
