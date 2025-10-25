@@ -1,0 +1,22 @@
+[project]
+name = "mcp-interpreter-server"
+version = "0.1.0"
+description = "MCP server with Python interpreter and vulnerability report parsing tools"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp[cli]>=1.17.0",
+    "fastmcp>=0.1.0",
+    "pydantic>=2.0.0",
+    "markdown>=3.5.0",
+    "beautifulsoup4>=4.12.0",
+    "regex>=2023.0.0",
+    "typing-extensions>=4.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

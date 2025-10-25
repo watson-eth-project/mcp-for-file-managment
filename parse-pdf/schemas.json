@@ -1,0 +1,100 @@
+{
+  "vulnerability_audit_schema": {
+    "description": "Схема для парсинга отчетов аудита безопасности смарт-контрактов",
+    "schema": {
+      "audit_info": {
+        "audit_firm": "string",
+        "project_name": "string", 
+        "audit_date": "string",
+        "contract_addresses": ["string"],
+        "audit_scope": "string"
+      },
+      "vulnerabilities": [
+        {
+          "id": "string",
+          "title": "string",
+          "severity": "string",
+          "description": "string",
+          "impact": "string",
+          "proof_of_concept": "string",
+          "remediation": "string",
+          "cwe": "string",
+          "tags": ["string"],
+          "references": ["string"]
+        }
+      ],
+      "summary": {
+        "total_vulnerabilities": "number",
+        "critical_count": "number",
+        "high_count": "number", 
+        "medium_count": "number",
+        "low_count": "number",
+        "info_count": "number"
+      }
+    }
+  },
+  
+  "general_document_schema": {
+    "description": "Общая схема для структурирования любого документа",
+    "schema": {
+      "document_info": {
+        "title": "string",
+        "author": "string",
+        "date": "string",
+        "type": "string",
+        "pages": "number"
+      },
+      "sections": [
+        {
+          "title": "string",
+          "content": "string",
+          "subsections": [
+            {
+              "title": "string", 
+              "content": "string"
+            }
+          ]
+        }
+      ],
+      "key_points": ["string"],
+      "conclusions": "string"
+    }
+  },
+  
+  "smart_contract_analysis_schema": {
+    "description": "Схема для анализа смарт-контрактов",
+    "schema": {
+      "contract_info": {
+        "name": "string",
+        "address": "string",
+        "network": "string",
+        "compiler_version": "string",
+        "language": "string"
+      },
+      "functions": [
+        {
+          "name": "string",
+          "visibility": "string",
+          "parameters": ["string"],
+          "returns": ["string"],
+          "description": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "string",
+          "parameters": ["string"],
+          "description": "string"
+        }
+      ],
+      "security_issues": [
+        {
+          "type": "string",
+          "severity": "string",
+          "description": "string",
+          "location": "string"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+[submodule "fetch-mcp"]
+	path = fetch-mcp
+	url = https://github.com/zcaceres/fetch-mcp
+[submodule "gitingest-mcp"]
+	path = gitingest-mcp
+	url = https://github.com/puravparab/Gitingest-MCP
+[submodule "mcp-filesystem-server"]
+	path = mcp-filesystem-server
+	url = https://github.com/mark3labs/mcp-filesystem-server
+[submodule "mcp-pandoc"]
+	path = mcp-pandoc
+	url = https://github.com/vivekVells/mcp-pandoc
+[submodule "agent"]
+	path = agent
+	url = https://github.com/1mcp-app/agent

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "vulnerability-parser": {
+      "command": "uv",
+      "args": ["run", "server.py", "--data-dir", "/Users/evgenijzdarkin/Documents/hack/ethonline/data"],
+      "cwd": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/mcp-interpreter-server",
+      "env": {
+        "PYTHONPATH": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/mcp-interpreter-server"
+      }
+    }
+  }
+}
