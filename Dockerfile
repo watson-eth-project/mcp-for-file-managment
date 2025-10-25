@@ -60,10 +60,6 @@ RUN uv sync --frozen
 WORKDIR /app/mcp-pandoc
 RUN uv sync --frozen
 
-WORKDIR /app/mcp-filesystem-server
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go mod download && \
-    CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o mcp-filesystem-server main.go
-
 WORKDIR /app/mcp-interpreter-server
 RUN uv sync --frozen
 
@@ -78,6 +74,16 @@ COPY agent/ ./agent/
 WORKDIR /app/agent
 RUN npm install -g pnpm && \
     pnpm install
+
+# Go back to app root
+WORKDIR /app
+
+# Build Go filesystem server (after all copying is done)
+WORKDIR /app/mcp-filesystem-server
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go mod download
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o mcp-filesystem-server main.go
+RUN chmod +x mcp-filesystem-server
+RUN ls -la mcp-filesystem-server
 
 # Go back to app root
 WORKDIR /app

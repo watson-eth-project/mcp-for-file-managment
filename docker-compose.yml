@@ -17,10 +17,10 @@ services:
       - ./agent:/app/agent:ro
       - ./fetch-mcp:/app/fetch-mcp:ro
       - ./gitingest-mcp:/app/gitingest-mcp:ro
-      - ./mcp-pandoc:/app/mcp-pandoc:ro
-      - ./mcp-filesystem-server:/app/mcp-filesystem-server:ro
-      - ./mcp-interpreter-server:/app/mcp-interpreter-server:ro
-      - ./parse-pdf:/app/parse-pdf:ro
+      - ./mcp-pandoc:/app/mcp-pandoc
+      - ./mcp-filesystem-server:/app/mcp-filesystem-server-source:ro
+      - ./mcp-interpreter-server:/app/mcp-interpreter-server
+      - ./parse-pdf:/app/parse-pdf
     environment:
       - PYTHONPATH=/app
       - NODE_ENV=production

@@ -94,3 +94,100 @@
 
 
 
+{
+  "mcpServers": {
+    "mcp_modules": {
+      "command": "/Users/evgenijzdarkin/.local/bin/uv",
+      "args": ["run", "server.py"],
+      "cwd": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp_modules",
+      "env": {
+        "PYTHONPATH": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp_modules",
+        "TIMEOUT": "600000",
+        "SLITHER_TIMEOUT": "120000",
+        "SOLC_TIMEOUT": "60000"
+      }
+    },
+    "mcp-foundry-anvil": {
+      "command": "/Users/evgenijzdarkin/.local/bin/uv",
+      "args": ["run", "server.py"],
+      "cwd": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-foundry-anvil",
+      "env": {
+        "PYTHONPATH": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-foundry-anvil"
+      }
+    },
+    "fetch-mcp": {
+      "command": "npx",
+      "args": ["-y", "mcp-fetch-server"],
+      "env": {
+        "DEFAULT_LIMIT": "200000",
+        "TIMEOUT": "600000",
+        "REQUEST_TIMEOUT": "600000",
+        "CONNECTION_TIMEOUT": "120000"
+      }
+    },
+    "gitingest-mcp": {
+      "command": "uvx",
+      "args": ["gitingestmcp@latest"],
+      "env": {
+        "PYTHONPATH": "./gitingest-mcp/src",
+        "TIMEOUT": "900000",
+        "GIT_TIMEOUT": "600000",
+        "GIT_CLONE_TIMEOUT": "900000",
+        "REQUEST_TIMEOUT": "600000",
+        "MAX_FILE_SIZE": "52428800"
+      }
+    },
+    "mcp-pandoc": {
+      "command": "/Users/evgenijzdarkin/.local/bin/uv",
+      "args": ["run", "mcp-pandoc"],
+      "cwd": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/mcp-pandoc",
+      "env": {
+        "PATH": "/Users/evgenijzdarkin/.local/bin:/opt/homebrew/opt/node@20/bin:$PATH",
+        "TIMEOUT": "600000",
+        "PANDOC_TIMEOUT": "600000",
+        "CONVERSION_TIMEOUT": "600000"
+      }
+    },
+    "mcp-filesystem-server": {
+      "command": "/Users/evgenijzdarkin/go/bin/mcp-filesystem-server",
+      "args": [
+        "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data",
+        "/Users/evgenijzdarkin/Documents/hack/ethonline"
+      ],
+      "env": {
+        "TIMEOUT": "300000",
+        "FILE_TIMEOUT": "300000",
+        "READ_TIMEOUT": "300000"
+      }
+    },
+    "mcp-interpreter-server": {
+      "command": "/Users/evgenijzdarkin/.local/bin/uv",
+      "args": ["run", "server.py"],
+      "cwd": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/mcp-interpreter-server",
+      "env": {
+        "PYTHONPATH": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/mcp-interpreter-server",
+        "TIMEOUT": "600000",
+        "PYTHON_TIMEOUT": "600000",
+        "EXECUTION_TIMEOUT": "600000",
+        "REQUEST_TIMEOUT": "600000",
+        "MAX_MEMORY_MB": "1024"
+      }
+    },
+    "parse-pdf": {
+      "command": "/Users/evgenijzdarkin/.local/bin/uv",
+      "args": ["run", "server.py"],
+      "cwd": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/parse-pdf",
+      "env": {
+        "PYTHONPATH": "/Users/evgenijzdarkin/Documents/hack/ethonline/mcp-vuln-data/parse-pdf",
+        "TIMEOUT": "600000",
+        "PDF_TIMEOUT": "300000",
+        "DOWNLOAD_TIMEOUT": "120000",
+        "PARSE_TIMEOUT": "180000"
+      }
+    }
+  }
+}
+
+
+
+

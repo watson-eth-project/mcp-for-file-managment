@@ -21,6 +21,52 @@
         "REQUEST_TIMEOUT": "600000",
         "MAX_FILE_SIZE": "52428800"
       }
+    },
+    "mcp-pandoc": {
+      "command": "uv",
+      "args": ["run", "mcp-pandoc"],
+      "cwd": "/app/mcp-pandoc",
+      "env": {
+        "TIMEOUT": "600000",
+        "PANDOC_TIMEOUT": "600000",
+        "CONVERSION_TIMEOUT": "600000"
+      }
+    },
+    "mcp-filesystem-server": {
+      "command": "/app/mcp-filesystem-server/mcp-filesystem-server",
+      "args": [
+        "/app"
+      ],
+      "env": {
+        "TIMEOUT": "300000",
+        "FILE_TIMEOUT": "300000",
+        "READ_TIMEOUT": "300000"
+      }
+    },
+    "mcp-interpreter-server": {
+      "command": "uv",
+      "args": ["run", "server.py"],
+      "cwd": "/app/mcp-interpreter-server",
+      "env": {
+        "PYTHONPATH": "/app/mcp-interpreter-server",
+        "TIMEOUT": "600000",
+        "PYTHON_TIMEOUT": "600000",
+        "EXECUTION_TIMEOUT": "600000",
+        "REQUEST_TIMEOUT": "600000",
+        "MAX_MEMORY_MB": "1024"
+      }
+    },
+    "parse-pdf": {
+      "command": "uv",
+      "args": ["run", "server.py"],
+      "cwd": "/app/parse-pdf",
+      "env": {
+        "PYTHONPATH": "/app/parse-pdf",
+        "TIMEOUT": "600000",
+        "PDF_TIMEOUT": "300000",
+        "DOWNLOAD_TIMEOUT": "120000",
+        "PARSE_TIMEOUT": "180000"
+      }
     }
   }
 }
