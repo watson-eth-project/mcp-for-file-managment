@@ -13,13 +13,15 @@
     "gitingest-mcp": {
       "command": "uvx",
       "args": ["gitingestmcp@latest"],
+      "cwd": "/app",
       "env": {
         "PYTHONPATH": "./gitingest-mcp/src",
-        "TIMEOUT": "900000",
-        "GIT_TIMEOUT": "600000",
-        "GIT_CLONE_TIMEOUT": "900000",
-        "REQUEST_TIMEOUT": "600000",
-        "MAX_FILE_SIZE": "52428800"
+        "TIMEOUT": "1800000",
+        "GIT_TIMEOUT": "1200000",
+        "GIT_CLONE_TIMEOUT": "1800000",
+        "REQUEST_TIMEOUT": "1200000",
+        "MAX_FILE_SIZE": "52428800",
+        "GIT_DISCOVERY_ACROSS_FILESYSTEM": "1"
       }
     },
     "mcp-pandoc": {

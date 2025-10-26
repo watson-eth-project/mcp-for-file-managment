@@ -1,5 +1,5 @@
-# Use Node.js 20 as base image for the 1MCP agent (specify linux/amd64 for compatibility)
-FROM --platform=linux/amd64 node:20-slim
+# Use Node.js 20 as base image for the 1MCP agent
+FROM node:20-slim
 
 # Set working directory
 WORKDIR /app
@@ -23,10 +23,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-# Install Go
-RUN wget https://go.dev/dl/go1.23.2.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.23.2.linux-amd64.tar.gz && \
-    rm go1.23.2.linux-amd64.tar.gz
+# Install Go (auto-detect architecture for multi-platform builds)
+ARG TARGETARCH=amd64
+RUN case ${TARGETARCH} in \
+    amd64) ARCH=amd64 ;; \
+    arm64) ARCH=arm64 ;; \
+    arm) ARCH=armv6l ;; \
+    *) ARCH=amd64 ;; \
+    esac && \
+    wget "https://go.dev/dl/go1.23.2.linux-${ARCH}.tar.gz" && \
+    tar -C /usr/local -xzf "go1.23.2.linux-${ARCH}.tar.gz" && \
+    rm "go1.23.2.linux-${ARCH}.tar.gz"
 
 # Install uv package manager for Python
 RUN pip3 install --break-system-packages uv
@@ -84,8 +91,8 @@ WORKDIR /app
 
 # Build Go filesystem server (after all copying is done)
 WORKDIR /app/mcp-filesystem-server
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go mod download
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o mcp-filesystem-server main.go
+RUN CGO_ENABLED=0 GOOS=linux go mod download
+RUN CGO_ENABLED=0 GOOS=linux go build -o mcp-filesystem-server main.go
 RUN chmod +x mcp-filesystem-server
 RUN ls -la mcp-filesystem-server
 
@@ -119,23 +126,34 @@ ENV NODE_ENV=production
 ENV MCP_CACHE_DIR=/tmp/mcp_cache
 ENV VULN_DATA_DIR=/tmp/vuln_data
 
-# Create startup script
-RUN echo '#!/bin/bash\n\
+# Create startup script with proper error handling
+RUN printf '#!/bin/bash\n\
+set -e\n\
 echo "Starting MCP Vulnerability Data System..."\n\
 echo "Config file location: /app/.1mcprc.docker"\n\
-test -f /app/.1mcprc.docker && echo "✓ Config file found" || echo "✗ Config file NOT found!"\n\
-\n\
-# Start Python server in background\n\
+if [ -f /app/.1mcprc.docker ]; then\n\
+    echo "✓ Config file found"\n\
+else\n\
+    echo "✗ Config file NOT found!"\n\
+    exit 1\n\
+fi\n\
+echo "Starting Python server..."\n\
 cd /app && uv run server.py &\n\
 PYTHON_PID=$!\n\
-\n\
-# Start 1MCP agent with Docker config (using absolute path)\n\
+sleep 2\n\
+echo "Starting 1MCP agent..."\n\
 cd /app/agent && pnpm start --transport http --port 3050 --host 0.0.0.0 --log-level info --config /app/.1mcprc.docker &\n\
 NODE_PID=$!\n\
-\n\
-# Wait for both processes\n\
-wait $PYTHON_PID $NODE_PID\n\
-' > /app/start.sh && chmod +x /app/start.sh
+cleanup() {\n\
+    echo "Shutting down..."\n\
+    kill $PYTHON_PID $NODE_PID 2>/dev/null || true\n\
+    exit 0\n\
+}\n\
+trap cleanup SIGTERM SIGINT\n\
+wait $PYTHON_PID $NODE_PID\n' > /app/start.sh && chmod +x /app/start.sh
 
-# Default command
-CMD ["/app/start.sh"]
+# Set working directory for runtime
+WORKDIR /app
+
+# Default command - use exec form for better signal handling
+CMD ["/bin/bash", "/app/start.sh"]

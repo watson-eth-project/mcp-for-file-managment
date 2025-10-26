@@ -325,17 +325,9 @@ def search_documents(query: str, fields: List[str] = None, limit: int = 20) -> L
     
     return results
 
-@mcp.tool()
+"""@mcp.tool()
 def execute_python(code: str) -> str:
-    """
-    Execute Python code and return the result.
-    
-    Args:
-        code: Python code to execute
-        
-    Returns:
-        Execution result or error message
-    """
+
     try:
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
             f.write(code)
@@ -359,7 +351,7 @@ def execute_python(code: str) -> str:
         return "Error: Code execution timed out"
     except Exception as e:
         return f"Error: {str(e)}"
-
+"""
 @mcp.tool()
 def parse_markdown_report(md_text: str) -> str:
     """

@@ -3,17 +3,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    platform: linux/amd64 
     container_name: mcp-vuln-data-server
     ports:
-      - "3050:3050"  # 1MCP agent
-      - "8000:8000"  # Python server
+      - "3050:3050"  
+      - "8000:8000"  
     volumes:
-      # Mount cache directories for persistent data
       - mcp_cache:/tmp/mcp_cache
       - vuln_data:/tmp/vuln_data
-      # Mount configuration files
       - ./.1mcprc.docker:/app/.1mcprc.docker:ro
-      # Mount source code for development (optional)
       - ./agent:/app/agent:ro
       - ./fetch-mcp:/app/fetch-mcp:ro
       - ./gitingest-mcp:/app/gitingest-mcp:ro
@@ -26,6 +24,7 @@ services:
       - NODE_ENV=production
       - MCP_CACHE_DIR=/tmp/mcp_cache
       - VULN_DATA_DIR=/tmp/vuln_data
+      - GIT_DISCOVERY_ACROSS_FILESYSTEM=1
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3050/health", "||", "curl", "-f", "http://localhost:8000/health"]
