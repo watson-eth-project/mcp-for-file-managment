@@ -88,6 +88,8 @@ docker-compose.yml
 !package.json
 !package-lock.json
 !pnpm-lock.yaml
+# Config files (allow hidden files starting with .)
+!.1mcprc*
 
 # Build artifacts
 build/

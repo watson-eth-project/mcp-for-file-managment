@@ -1,5 +1,5 @@
-# Use Node.js 20 as base image for the 1MCP agent
-FROM node:20-slim
+# Use Node.js 20 as base image for the 1MCP agent (specify linux/amd64 for compatibility)
+FROM --platform=linux/amd64 node:20-slim
 
 # Set working directory
 WORKDIR /app
@@ -38,6 +38,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 COPY pyproject.toml uv.lock ./
 COPY server.py ./
 COPY README.md ./
+COPY .1mcprc.docker ./
 
 # Install Python dependencies
 RUN uv sync --frozen
@@ -52,7 +53,9 @@ COPY parse-pdf/ ./parse-pdf/
 
 # Install dependencies for each MCP server
 WORKDIR /app/fetch-mcp
-RUN npm install
+RUN npm install && \
+    npm install -g typescript && \
+    npm run build
 
 WORKDIR /app/gitingest-mcp
 RUN uv sync --frozen
@@ -73,7 +76,8 @@ COPY agent/ ./agent/
 # Install Node.js dependencies
 WORKDIR /app/agent
 RUN npm install -g pnpm && \
-    pnpm install
+    pnpm install && \
+    pnpm build
 
 # Go back to app root
 WORKDIR /app
@@ -91,6 +95,20 @@ WORKDIR /app
 # Create necessary directories
 RUN mkdir -p /tmp/mcp_cache /tmp/vuln_data
 
+# Create a proper Git environment for gitingest to work with
+RUN cd /app && \
+    git init . && \
+    git config user.name "Docker User" && \
+    git config user.email "docker@example.com" && \
+    git config core.preloadindex false && \
+    git config core.fscache false && \
+    git config gc.auto 0 && \
+    git config submodule.recurse false && \
+    git config submodule.active false && \
+    echo "# Docker Git Repository" > README.md && \
+    git add README.md && \
+    git commit -m "Initial commit" || true
+
 # Expose ports
 # 3050 for 1MCP agent, 8000 for Python server
 EXPOSE 3050 8000
@@ -104,13 +122,15 @@ ENV VULN_DATA_DIR=/tmp/vuln_data
 # Create startup script
 RUN echo '#!/bin/bash\n\
 echo "Starting MCP Vulnerability Data System..."\n\
+echo "Config file location: /app/.1mcprc.docker"\n\
+test -f /app/.1mcprc.docker && echo "✓ Config file found" || echo "✗ Config file NOT found!"\n\
 \n\
 # Start Python server in background\n\
 cd /app && uv run server.py &\n\
 PYTHON_PID=$!\n\
 \n\
-# Start 1MCP agent with Docker config\n\
-cd /app/agent && pnpm start --transport http --port 3050 --host 0.0.0.0 --log-level info --config ../.1mcprc.docker &\n\
+# Start 1MCP agent with Docker config (using absolute path)\n\
+cd /app/agent && pnpm start --transport http --port 3050 --host 0.0.0.0 --log-level info --config /app/.1mcprc.docker &\n\
 NODE_PID=$!\n\
 \n\
 # Wait for both processes\n\
