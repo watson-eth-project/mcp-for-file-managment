@@ -3,7 +3,12 @@ Overview
 This project integrates several external MCP servers and tools in order to extend functionality (filesystem access, web retrieval, repo inspection, document conversion, multi-MCP aggregation, etc.).
 All referenced components are developed and published by their respective authors under their own open-source licenses.
 
-Included / Integrated MCP Components
+## Deployed MCP
+
+https://hearty-adventure-production.up.railway.app/mcp
+
+
+## Included / Integrated MCP Components
 
 1. 1MCP (One MCP Server for All) [https://github.com/zcaceres/fetch-mcp]('https://github.com/zcaceres/fetch-mcp')
 -	Original repository: 1mcp-app/agent
